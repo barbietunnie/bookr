@@ -25,4 +25,21 @@ class BooksControllerTest extends TestCase
                     'title' => 'A Wrinkle in Time'
                ]);
     }
+
+    /** @test **/
+    public function show_should_return_a_valid_book()
+    {
+        $this->markTestIncomplete('Pending Test');
+    }
+
+    /** @test **/
+    public function show_should_fail_if_book_id_does_not_exist()
+    {
+        $this->markTestIncomplete('Pending Test');
+    }
+
+    public function show_route_show_not_match_an_invalid_route()
+    {
+        $this->markTestIncomplete('Pending Test');
+    }
 }

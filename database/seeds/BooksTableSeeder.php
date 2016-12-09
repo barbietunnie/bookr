@@ -26,7 +26,7 @@ class BooksTableSeeder extends Seeder
             ->insert([
                   'title'         =>    'A Wrinkle in Time',
                   'description'   =>    'A young girl goes on a mission to save her father who has gone missing after working on a mysterious project called a tesseract',
-                  'author'        =>    'Madeleine L\'Engle,
+                  'author'        =>    'Madeleine L\'Engle',
                   'created_at'    =>    Carbon::now(),
                   'updated_at'    =>    Carbon::now()
               ]);
