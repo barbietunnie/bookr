@@ -22,4 +22,14 @@ class BooksController
     // ];
     return Book::all();
   }
+
+  /**
+   * GET /books/{id}
+   * @param integer $id
+   * @return mixed
+   */
+  public function show($id)
+  {
+    return Book::findOrFail($id);
+  }
 }

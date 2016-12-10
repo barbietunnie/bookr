@@ -29,15 +29,34 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function show_should_return_a_valid_book()
     {
-        $this->markTestIncomplete('Pending Test');
+        $this->get('/books/1')
+             ->seeStatusCode(200)
+             ->seeJson([
+                  'id'                =>   1,
+                  'title'             =>   'War of the Worlds',
+                  'description'       =>   'A science fiction masterpiece about Martians invading London',
+                  'author'            =>   'H. G. Wells'
+               ]);
+
+        $data = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('created_at', $data);
+        $this->assertArrayHasKey('updated_at', $data);
     }
 
     /** @test **/
     public function show_should_fail_if_book_id_does_not_exist()
     {
-        $this->markTestIncomplete('Pending Test');
+        // $this->markTestIncomplete('Pending Test');
+        $this->get('/books/99999')
+             ->seeStatusCode(404)
+             ->seeJson([
+                  'error' => [
+                        'message' => 'Book not found'
+                    ]
+               ]);
     }
 
+    /** @test **/
     public function show_route_show_not_match_an_invalid_route()
     {
         $this->markTestIncomplete('Pending Test');
