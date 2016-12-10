@@ -59,6 +59,14 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function show_route_show_not_match_an_invalid_route()
     {
-        $this->markTestIncomplete('Pending Test');
+        // $this->markTestIncomplete('Pending Test');
+
+        $this->get('books/this-is-invalid');
+
+        $this->assertNotRegExp(
+            '/Book not found/',
+            $this->response->getContent(),
+            'BooksController@show route matching when it should not.'
+        );
     }
 }
