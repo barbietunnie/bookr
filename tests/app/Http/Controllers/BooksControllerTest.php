@@ -69,4 +69,16 @@ class BooksControllerTest extends TestCase
             'BooksController@show route matching when it should not.'
         );
     }
+
+    /** @test **/
+    public function store_should_save_new_book_in_the_database()
+    {
+      $this->markTestIncomplete('pending');
+    }
+
+    /** @test **/
+    public function store_should_respond_with_a_201_and_location_header_when_successful()
+    {
+      $this->markTestIncomplete('pending');
+    }
 }
