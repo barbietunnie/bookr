@@ -50,11 +50,13 @@ class BooksController
    */
   public function store(Request $request)
   {
-      try {
-        $book = Book::create($request->all());
-      } catch(\Exception $e) {
-        dd(get_class($e));
-      }
+      // try {
+      //   $book = Book::create($request->all());
+      // } catch(\Exception $e) {
+      //   dd(get_class($e));
+      // }
+
+      $book = Book::create($request->all());
 
       return response()->json(['created' => true], 201);
   }
