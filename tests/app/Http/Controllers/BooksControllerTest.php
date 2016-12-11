@@ -89,6 +89,16 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function store_should_respond_with_a_201_and_location_header_when_successful()
     {
-      $this->markTestIncomplete('pending');
+      // $this->markTestIncomplete('pending');
+
+      $this->post('/books', [
+          'title'          => 'The Invisible Man',
+          'description'    => 'An invisible man is trapped in the terror of his own creation',
+          'author'         => 'H. G. Wells'
+      ]);
+
+      $this
+            ->seeStatusCode(201)
+            ->seeHeaderWithRegExp('Location', '#/books/[\d]+$#');
     }
 }

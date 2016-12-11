@@ -58,6 +58,10 @@ class BooksController
 
       $book = Book::create($request->all());
 
-      return response()->json(['created' => true], 201);
+      //return response()->json(['created' => true], 201);
+
+      return response()->json(['created' => true], 201, [
+            'Location'    =>  route('books.show', ['id' => $book->id])
+      ]);
   }
 }
