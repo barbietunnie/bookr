@@ -101,4 +101,20 @@ class BooksControllerTest extends TestCase
             ->seeStatusCode(201)
             ->seeHeaderWithRegExp('Location', '#/books/[\d]+$#');
     }
+
+    /** @test **/
+    public function update_should_only_change_fillable_fields()
+    {
+        $this->markTestIncomplete('pending');
+    }
+
+    public function update_should_fail_with_an_invalid_id()
+    {
+        $this->markTestIncomplete('pending');
+    }
+
+    public function update_should_not_match_an_invalid_route()
+    {
+        $this->markTestIncomplete('pending');
+    }
 }
