@@ -149,4 +149,21 @@ class BooksControllerTest extends TestCase
           ->put('/books/this-is-in-invalid')
           ->seeStatusCode(404);
     }
+
+    /** @test **/
+    public function destroy_should_remove_a_valid_book()
+    {
+        $this->markTestIncomplete('pending');
+    }
+
+    /** @test **/
+    public function destroy_should_return_a_404_with_an_invalid_id()
+    {
+        $this->markTestIncomplete('pending');
+    }
+
+    public function destroy_should_not_match_an_invalid_route()
+    {
+
+    }
 }
