@@ -64,4 +64,21 @@ class BooksController
             'Location'    =>  route('books.show', ['id' => $book->id])
       ]);
   }
+
+  /**
+   * PUT /books/{id}
+   *
+   * @param Request $request
+   * @param $id
+   * @return mixed
+   */
+  public function update(Request $request, $id)
+  {
+      $book = Book::findOrFail($id);
+
+      $book->fill($request->all());
+      $book->save();
+
+      return $book;
+  }
 }

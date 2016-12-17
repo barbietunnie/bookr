@@ -105,7 +105,28 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function update_should_only_change_fillable_fields()
     {
-        $this->markTestIncomplete('pending');
+        $this->notSeeInDatabase('books', [
+            'title' => 'The War of the Worlds'
+        ]);
+
+        $this->put('/books/1', [
+            'id' => 5,
+            'title' => 'The War of the Worlds',
+            'description' => 'The book is way better than the movie.',
+            'author' => 'Wells, H. G.'
+        ]);
+
+        $this
+            ->seeStatusCode(200)
+            ->seeJson([
+                'id' => 1,
+                'title' => 'The War of the Worlds',
+                'description' => 'The book is way better than the movie.',
+                'author' => 'Wells, H. G.'
+            ])
+            ->seeInDatabase('books', [
+                'title' => 'The War of the Worlds'
+            ]);
     }
 
     public function update_should_fail_with_an_invalid_id()
