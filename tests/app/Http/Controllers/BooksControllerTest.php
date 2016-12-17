@@ -153,7 +153,14 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function destroy_should_remove_a_valid_book()
     {
-        $this->markTestIncomplete('pending');
+        $this
+            ->delete('/books/1')
+            ->seeStatusCode(204)
+            ->isEmpty();
+
+        $this->notSeeInDatabase('books', [
+            'id'  => 1
+        ]);
     }
 
     /** @test **/

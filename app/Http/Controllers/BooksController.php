@@ -90,4 +90,17 @@ class BooksController
 
       return $book;
   }
+
+  /**
+   * DELETE /books/{id}
+   * @param $id
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function destroy($id)
+  {
+      $book = Book::findOrFail($id);
+      $book->delete();
+
+      return response(null, 204);
+  }
 }
