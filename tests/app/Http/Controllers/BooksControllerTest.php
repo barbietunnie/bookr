@@ -129,13 +129,24 @@ class BooksControllerTest extends TestCase
             ]);
     }
 
+    /** @test **/
     public function update_should_fail_with_an_invalid_id()
     {
-        $this->markTestIncomplete('pending');
+        $this
+            ->put('/books/999999999999999')
+            ->seeStatusCode(404)
+            ->seeJsonEquals([
+                'error' => [
+                      'message' => 'Book not found'
+                  ]
+            ]);
     }
 
+    /** @test **/
     public function update_should_not_match_an_invalid_route()
     {
-        $this->markTestIncomplete('pending');
+        $this
+          ->put('/books/this-is-in-invalid')
+          ->seeStatusCode(404);
     }
 }
