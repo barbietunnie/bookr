@@ -80,7 +80,7 @@ class FractalResponseTest extends TestCase
       $scope
           ->shouldReceive('toArray')
           ->once()
-          ->andReturn(['foo' => 'bar']);
+          ->andReturn($data);
 
       // Serializer
       $serializer = m::mock('League\Fractal\Serializer\SerializerAbstract');
