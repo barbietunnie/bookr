@@ -59,12 +59,11 @@ class BooksControllerTest extends TestCase
     public function show_should_fail_if_book_id_does_not_exist()
     {
         // $this->markTestIncomplete('Pending Test');
-        $this->get('/books/99999')
+        $this->get('/books/99999', ['Accept' => 'application/json'])
              ->seeStatusCode(404)
              ->seeJson([
-                  'error' => [
-                        'message' => 'Book not found'
-                    ]
+                     'message' => 'Not Found',
+                     'status' => 404
                ]);
     }
 
