@@ -26,7 +26,7 @@ class BooksControllerTest extends TestCase
 
         $this->get('/books');
 
-        dd($this->response->getContent());
+        // dd($this->response->getContent());
 
         foreach ($books as $book) {
             $this->seeJson(['title' => $book->title]);
@@ -49,7 +49,7 @@ class BooksControllerTest extends TestCase
 
         $data = json_decode($this->response->getContent(), true);
 
-        dd($data);
+        // dd($data);
 
         $this->assertArrayHasKey('created_at', $data);
         $this->assertArrayHasKey('updated_at', $data);
@@ -117,11 +117,17 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function update_should_only_change_fillable_fields()
     {
-        $this->notSeeInDatabase('books', [
-            'title' => 'The War of the Worlds'
+        $book = factory('App\Book')->create([
+                    'title' => 'War of the Worlds',
+                    'description' => 'A science fiction masterpiece about Martians invading London',
+                    'author' => 'H. G. Wells'
         ]);
 
-        $this->put('/books/1', [
+        // $this->notSeeInDatabase('books', [
+        //     'title' => 'The War of the Worlds'
+        // ]);
+
+        $this->put("/books/{$book->id}", [
             'id' => 5,
             'title' => 'The War of the Worlds',
             'description' => 'The book is way better than the movie.',
@@ -165,14 +171,14 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function destroy_should_remove_a_valid_book()
     {
+        $book = factory('App\Book')->create();
+
         $this
-            ->delete('/books/1')
+            ->delete("/books/{$book->id}")
             ->seeStatusCode(204)
             ->isEmpty();
 
-        $this->notSeeInDatabase('books', [
-            'id'  => 1
-        ]);
+        $this->notSeeInDatabase('books', ['id'  => $book->id]);
     }
 
     /** @test **/
