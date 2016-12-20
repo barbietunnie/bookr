@@ -3,11 +3,14 @@
 namespace Test\App\Http\Controllers;
 
 use TestCase;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 
 // use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class BooksControllerTest extends TestCase
 {
+    use DatabaseMigrations;
+
     /** @test **/
     public function index_status_code_should_be_200()
     {
@@ -19,7 +22,11 @@ class BooksControllerTest extends TestCase
     {
         $books = factory('App\Book', 2)->create();
 
+        // dd($books);
+
         $this->get('/books');
+
+        dd($this->response->getContent());
 
         foreach ($books as $book) {
             $this->seeJson(['title' => $book->title]);
@@ -29,16 +36,21 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function show_should_return_a_valid_book()
     {
-        $this->get('/books/1')
+        $book = factory('App\Book')->create();
+
+        $this->get("/books/{$book->id}")
              ->seeStatusCode(200)
              ->seeJson([
-                  'id'                =>   1,
-                  'title'             =>   'War of the Worlds',
-                  'description'       =>   'A science fiction masterpiece about Martians invading London',
-                  'author'            =>   'H. G. Wells'
+                  'id'                =>   $book->id,
+                  'title'             =>   $book->title,
+                  'description'       =>   $book->description,
+                  'author'            =>   $book->author
                ]);
 
         $data = json_decode($this->response->getContent(), true);
+
+        dd($data);
+
         $this->assertArrayHasKey('created_at', $data);
         $this->assertArrayHasKey('updated_at', $data);
     }
