@@ -22,7 +22,7 @@ class BooksController
     //     ['title' => 'War of the Worlds'],
     //     ['title' => 'A Wrinkle in Time']
     // ];
-    return Book::all();
+    return ['data' => Book::all()->toArray()];
   }
 
   /**
@@ -45,7 +45,7 @@ class BooksController
     // Since the Handler class already handles exceptions,
     // remove the try/catch block
 
-    return Book::findOrFail($id);
+    return ['data' => Book::findOrFail($id)->toArray()];
   }
 
   /**
@@ -65,9 +65,12 @@ class BooksController
 
       //return response()->json(['created' => true], 201);
 
-      return response()->json(['created' => true], 201, [
-            'Location'    =>  route('books.show', ['id' => $book->id])
-      ]);
+      // return response()->json(['created' => true], 201, [
+      //       'Location'    =>  route('books.show', ['id' => $book->id])
+      // ]);
+
+      return response()->json(['data' => $book->toArray()], 201,
+                    ['Location'    =>  route('books.show', ['id' => $book->id])]);
   }
 
   /**
@@ -93,7 +96,8 @@ class BooksController
       $book->fill($request->all());
       $book->save();
 
-      return $book;
+      // return $book;
+      return ['data' => $book->toArray()];
   }
 
   /**

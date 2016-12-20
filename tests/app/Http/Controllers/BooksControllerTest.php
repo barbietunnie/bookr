@@ -28,9 +28,15 @@ class BooksControllerTest extends TestCase
 
         // dd($this->response->getContent());
 
-        foreach ($books as $book) {
-            $this->seeJson(['title' => $book->title]);
-        }
+        // foreach ($books as $book) {
+        //     $this->seeJson(['title' => $book->title]);
+        // }
+
+        $expected = [
+              'data' => $books->toArray()
+        ];
+
+        $this->seeJsonEquals($expected);
     }
 
     /** @test **/
@@ -38,21 +44,20 @@ class BooksControllerTest extends TestCase
     {
         $book = factory('App\Book')->create();
 
+        $expected = [
+              'data' => $book->toArray()
+        ];
+
         $this->get("/books/{$book->id}")
              ->seeStatusCode(200)
-             ->seeJson([
-                  'id'                =>   $book->id,
-                  'title'             =>   $book->title,
-                  'description'       =>   $book->description,
-                  'author'            =>   $book->author
-               ]);
+             ->seeJson($expected);
 
-        $data = json_decode($this->response->getContent(), true);
-
-        // dd($data);
-
-        $this->assertArrayHasKey('created_at', $data);
-        $this->assertArrayHasKey('updated_at', $data);
+        // $data = json_decode($this->response->getContent(), true);
+        //
+        // // dd($data);
+        //
+        // $this->assertArrayHasKey('created_at', $data);
+        // $this->assertArrayHasKey('updated_at', $data);
     }
 
     /** @test **/
@@ -84,17 +89,26 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function store_should_save_new_book_in_the_database()
     {
-      // $this->markTestIncomplete('pending');
+        // $this->markTestIncomplete('pending');
 
-      $this->post('/books', [
-          'title'          => 'The Invisible Man',
-          'description'    => 'An invisible man is trapped in the terror of his own creation',
-          'author'         => 'H. G. Wells'
-      ]);
+        $this->post('/books', [
+            'title'          => 'The Invisible Man',
+            'description'    => 'An invisible man is trapped in the terror of his own creation',
+            'author'         => 'H. G. Wells'
+        ]);
 
-      $this
-            ->seeJson(['created' => true])
-            ->seeInDatabase('books', ['title' => 'The Invisible Man']);
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
+
+        $data= $body['data'];
+        $this->assertEquals('The Invisible Man', $data['title']);
+        $this->assertEquals(
+                    'An invisible man is trapped in the terror of his own creation',
+                    $data['description']
+        );
+        $this->assertEquals('H. G. Wells', $data['author']);
+        $this->assertTrue($data['id'] > 0, 'Expected a positive integer, but did not see one.');
+        $this->seeInDatabase('books', ['title' => 'The Invisible Man']);
     }
 
     /** @test **/
@@ -122,9 +136,11 @@ class BooksControllerTest extends TestCase
                     'author' => 'H. G. Wells'
         ]);
 
-        // $this->notSeeInDatabase('books', [
-        //     'title' => 'The War of the Worlds'
-        // ]);
+        $this->notSeeInDatabase('books', [
+            'title' => 'The War of the Worlds',
+            'description' => 'The book is way better than the movie.',
+            'author' => 'Wells, H. G.'
+        ]);
 
         $this->put("/books/{$book->id}", [
             'id' => 5,
@@ -144,6 +160,10 @@ class BooksControllerTest extends TestCase
             ->seeInDatabase('books', [
                 'title' => 'The War of the Worlds'
             ]);
+
+        // Verify the data key in the response
+        $body = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $body);
     }
 
     /** @test **/
