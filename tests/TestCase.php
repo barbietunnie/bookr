@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class TestCase extends Laravel\Lumen\Testing\TestCase
 {
+    use MockeryPHPUnitIntegration;
+    
     /**
      * Default preparation for each test
      */
