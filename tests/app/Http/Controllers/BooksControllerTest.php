@@ -17,13 +17,13 @@ class BooksControllerTest extends TestCase
     /** @test **/
     public function index_should_return_a_collection_of_records()
     {
-        $this->get('/books')
-             ->seeJson([
-                    'title' => 'War of the Worlds'
-               ])
-             ->seeJson([
-                    'title' => 'A Wrinkle in Time'
-               ]);
+        $books = factory('App\Book', 2)->create();
+
+        $this->get('/books');
+
+        foreach ($books as $book) {
+            $this->seeJson(['title' => $book->title]);
+        }
     }
 
     /** @test **/

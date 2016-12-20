@@ -1,7 +1,30 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
+
 class TestCase extends Laravel\Lumen\Testing\TestCase
 {
+    /**
+     * Default preparation for each test
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->prepareForTests();
+    }
+
+    /**
+     * Migrates the database and set the mailer to 'pretend'.
+     * This will cause the tests to run quickly.
+     *
+     */
+     private function prepareForTests()
+     {
+        Artisan::call('migrate');
+        // Mailer::pretend(true);
+     }
+
     /**
      * Creates the application.
      *
