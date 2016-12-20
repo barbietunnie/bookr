@@ -46,4 +46,37 @@ class HandlerTest extends TestCase
       // Asert that `render` does not return a JsonResponse
       $this->assertNotInstanceOf(JsonResponse::class, $result);
   }
+
+
+  /** @test **/
+  public function it_responds_with_json_for_json_consumers()
+  {
+
+      // Make the mock a partial, you only want to mock the `isDebugMode` method
+      $subject = m::mock(Handler::class)->makePartial();
+      $subject
+            ->shouldReceive('isDebugMode')
+            ->andReturn(false);
+
+      // Mock the interaction with th Request
+      $request = m::mock(Request::class);
+      $request
+            ->shouldReceive('wantsJson')
+            ->andReturn(true);
+
+      // Mock the interaction with the exception
+      $exception = m::mock(\Exception::class, ['Doh!']);
+      $exception
+              ->shouldReceive('getMessage')
+              ->andReturn('Doh!');
+
+      /** @var JsonResponse $result */
+      $result = $subject->render($request, $exception);
+      $data = $result->getData();
+
+      $this->assertInstanceOf(JsonResponse::class, $result);
+      $this->assertObjectHasAttribute('error', $data);
+      $this->assertAttributeEquals('Doh!', 'message', $data->error);
+      $this->assertAttributeEquals(400, 'status', $data->error);
+  }
 }
