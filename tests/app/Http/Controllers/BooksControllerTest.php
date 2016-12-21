@@ -199,6 +199,13 @@ class BooksControllerTest extends TestCase
         // Verify the data key in the response
         $body = json_decode($this->response->getContent(), true);
         $this->assertArrayHasKey('data', $body);
+
+        $data= $body['data'];
+
+        $this->assertArrayHasKey('created', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['created']);
+        $this->assertArrayHasKey('updated', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['updated']);
     }
 
     /** @test **/

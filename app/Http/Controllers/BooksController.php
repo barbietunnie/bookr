@@ -91,8 +91,8 @@ class BooksController extends Controller
       $book->fill($request->all());
       $book->save();
 
-      // return $book;
-      return ['data' => $book->toArray()];
+      // return ['data' => $book->toArray()];
+      return $this->item($book, new BookTransformer());
   }
 
   /**
