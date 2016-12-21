@@ -47,15 +47,25 @@ class BooksControllerTest extends TestCase
     {
         $book = factory('App\Book')->create();
 
-        $expected = [
-              'data' => $book->toArray()
-        ];
-
         $this->get("/books/{$book->id}")
-             ->seeStatusCode(200)
-             ->seeJson($expected);
+             ->seeStatusCode(200);
 
-        // $data = json_decode($this->response->getContent(), true);
+        // Get the response and assert the data key exists
+        $content = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $content);
+
+        $data = $content['data'];
+
+        // Assert the book properties match
+        $this->assertEquals($book->id, $data['id']);
+        $this->assertEquals($book->title, $data['title']);
+        $this->assertEquals($book->description, $data['description']);
+        $this->assertEquals($book->author, $data['author']);
+        $this->assertEquals($book->created_at->toIso8601String(), $data['created']);
+        $this->assertEquals($book->updated_at->toIso8601String(), $data['updated']);
+        $this->assertEquals($book->created_at->diffForHumans(), $data['released']);
+
+
         //
         // // dd($data);
         //

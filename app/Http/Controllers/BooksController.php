@@ -49,7 +49,9 @@ class BooksController extends Controller
     // Since the Handler class already handles exceptions,
     // remove the try/catch block
 
-    return ['data' => Book::findOrFail($id)->toArray()];
+    // return ['data' => Book::findOrFail($id)->toArray()];
+
+    return $this->item(Book::findOrFail($id), new BookTransformer());
   }
 
   /**
@@ -59,21 +61,10 @@ class BooksController extends Controller
    */
   public function store(Request $request)
   {
-      // try {
-      //   $book = Book::create($request->all());
-      // } catch(\Exception $e) {
-      //   dd(get_class($e));
-      // }
-
       $book = Book::create($request->all());
+      $data = $this->item($book, new BookTransformer());
 
-      //return response()->json(['created' => true], 201);
-
-      // return response()->json(['created' => true], 201, [
-      //       'Location'    =>  route('books.show', ['id' => $book->id])
-      // ]);
-
-      return response()->json(['data' => $book->toArray()], 201,
+      return response()->json($data, 201,
                     ['Location'    =>  route('books.show', ['id' => $book->id])]);
   }
 
