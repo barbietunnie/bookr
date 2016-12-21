@@ -26,17 +26,20 @@ class BooksControllerTest extends TestCase
 
         $this->get('/books');
 
-        // dd($this->response->getContent());
+        $content = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $content);
 
-        // foreach ($books as $book) {
-        //     $this->seeJson(['title' => $book->title]);
-        // }
-
-        $expected = [
-              'data' => $books->toArray()
-        ];
-
-        $this->seeJsonEquals($expected);
+        foreach ($books as $book) {
+            $this->seeJson([
+                      'id'                => $book->id,
+                      'title'             => $book->title,
+                      'description'       => $book->description,
+                      'author'            => $book->author,
+                      'created'           => $book->created_at->toIso8601String(),
+                      'updated'           => $book->updated_at->toIso8601String(),
+                      'released'          => $book->created_at->diffForHumans()
+            ]);
+        }
     }
 
     /** @test **/

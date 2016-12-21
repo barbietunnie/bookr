@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\Book;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Transformer\BookTransformer;
 
 /**
  * Class BooksController
  * @package App\Http\Controllers
  */
-class BooksController
+class BooksController extends Controller
 {
   /**
    * GET /books
@@ -22,7 +23,10 @@ class BooksController
     //     ['title' => 'War of the Worlds'],
     //     ['title' => 'A Wrinkle in Time']
     // ];
-    return ['data' => Book::all()->toArray()];
+
+    //return ['data' => Book::all()->toArray()];
+
+    return $this->collection(Book::all(), new BookTransformer());
   }
 
   /**
