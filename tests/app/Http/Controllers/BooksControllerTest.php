@@ -4,12 +4,27 @@ namespace Test\App\Http\Controllers;
 
 use TestCase;
 use Laravel\Lumen\Testing\DatabaseMigrations;
+use Carbon\Carbon;
 
 // use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class BooksControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        Carbon::setTestNow(Carbon::now('UTC'));
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Carbon::setTestNow();
+    }
 
     /** @test **/
     public function index_status_code_should_be_200()
@@ -121,6 +136,13 @@ class BooksControllerTest extends TestCase
         );
         $this->assertEquals('H. G. Wells', $data['author']);
         $this->assertTrue($data['id'] > 0, 'Expected a positive integer, but did not see one.');
+        $this->seeInDatabase('books', ['title' => 'The Invisible Man']);
+
+        $this->assertArrayHasKey('created', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['created']);
+        $this->assertArrayHasKey('updated', $data);
+        $this->assertEquals(Carbon::now()->toIso8601String(), $data['updated']);
+
         $this->seeInDatabase('books', ['title' => 'The Invisible Man']);
     }
 
